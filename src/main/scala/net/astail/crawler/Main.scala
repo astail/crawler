@@ -7,6 +7,8 @@ import javax.imageio.ImageIO
 import collection.JavaConverters._
 import org.jsoup._
 
+import scala.util.control.NonFatal
+
 object Main {
   def main(args: Array[String]): Unit = {
     val doc = Jsoup.connect("http://satlog.blog119.fc2.com/blog-entry-2943.html").get
@@ -23,9 +25,13 @@ object Main {
   }
 
   def download(url: String, name: String, dir: String) = {
-    val f = new File(dir + name)
-    val u = new URL(url)
-    val r = ImageIO.read(u)
-    ImageIO.write(r, "jpg", f)
+    try {
+      val f = new File(dir + name)
+      val u = new URL(url)
+      val r = ImageIO.read(u)
+      ImageIO.write(r, "jpg", f)
+    } catch {
+      case NonFatal(t) => println(t)
+    }
   }
 }
