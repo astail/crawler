@@ -2,7 +2,10 @@ package net.astail.crawler
 
 import java.io.File
 import java.net.URL
+import java.nio.file.{Files, Paths}
+
 import javax.imageio.ImageIO
+
 import collection.JavaConverters._
 import scala.util.control.NonFatal
 import org.jsoup._
@@ -27,15 +30,15 @@ object Main {
 
   def jsoup = {
     val result = Jsoup.connect("http://satlog.blog119.fc2.com/blog-entry-2943.html").get
-//    println(result)
+    val dir = "/tmp/astel/"
+    val mkdir = Paths.get(dir)
+    if(Files.notExists(mkdir)) Files.createDirectories(mkdir)
 
     for (t <- result.select("img").asScala) {
       val x = t.attr("src")
       if (x.split('.').last == "jpg") {
         val url = x
         val name = x.split('/').last
-        val dir = "/tmp/astel/"
-//        println(x)
         download(url, name, dir)
       }
     }
