@@ -30,7 +30,7 @@ object Main {
 
   def jsoup = {
     val result = Jsoup.connect("http://satlog.blog119.fc2.com/blog-entry-2943.html").get
-    val dir = "/tmp/astel/"
+    val dir = "./get_files/"
     val mkdir = Paths.get(dir)
     if(Files.notExists(mkdir)) Files.createDirectories(mkdir)
 
