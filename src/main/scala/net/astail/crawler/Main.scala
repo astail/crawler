@@ -10,11 +10,14 @@ import collection.JavaConverters._
 import scala.util.control.NonFatal
 import org.jsoup._
 import skinny.http._
+import com.typesafe.config.ConfigFactory
 
 
 object Main {
   def main(args: Array[String]): Unit = {
     jsoup
+
+
   }
 
   def download(url: String, name: String, dir: String) = {
@@ -29,7 +32,9 @@ object Main {
   }
 
   def jsoup = {
-    val result = Jsoup.connect("http://satlog.blog119.fc2.com/blog-entry-2943.html").get
+    val conf = ConfigFactory.load
+    val url = conf.getString("set_url")
+    val result = Jsoup.connect(url).get
     val dir = "./get_files/"
     val mkdir = Paths.get(dir)
     if(Files.notExists(mkdir)) Files.createDirectories(mkdir)
