@@ -9,15 +9,15 @@ import javax.imageio.ImageIO
 import collection.JavaConverters._
 import scala.util.control.NonFatal
 import org.jsoup._
-import skinny.http._
 import com.typesafe.config.ConfigFactory
 
 
 object Main {
   def main(args: Array[String]): Unit = {
-    jsoup
+    val CONF = ConfigFactory.load
+    val URL = CONF.getString("set_url")
 
-
+    jsoup(URL)
   }
 
   def download(url: String, name: String, dir: String) = {
@@ -31,13 +31,11 @@ object Main {
     }
   }
 
-  def jsoup = {
-    val conf = ConfigFactory.load
-    val url = conf.getString("set_url")
+  def jsoup(url: String) = {
     val result = Jsoup.connect(url).get
     val dir = "./get_files/"
     val mkdir = Paths.get(dir)
-    if(Files.notExists(mkdir)) Files.createDirectories(mkdir)
+    if (Files.notExists(mkdir)) Files.createDirectories(mkdir)
 
     for (t <- result.select("img").asScala) {
       val x = t.attr("src")
@@ -47,18 +45,5 @@ object Main {
         download(url, name, dir)
       }
     }
-  }
-
-  def skinny = {
-    val response: Response = HTTP.get("http://satlog.blog119.fc2.com/blog-entry-2943.html")
-    print(response.textBody)
-//    if(response.textBody.contains("img")) println(response.textBody)
-  }
-
-
-  def scalaiosource: Unit = {
-    val url = "http://satlog.blog119.fc2.com/blog-entry-2943.html"
-    val result = scala.io.Source.fromURL(url).mkString
-//    println(result contains "img")
   }
 }
