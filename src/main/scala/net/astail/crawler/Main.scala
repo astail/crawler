@@ -17,7 +17,11 @@ import scalikejdbc.config.DBs
 object Main {
   def main(args: Array[String]): Unit = {
     val URL = ConfigFactory.load.getString("set_url")
-    jsoup(URL)
+    val DIR = ConfigFactory.load.getString("set_dir")
+
+    val mkdir = Paths.get(DIR)
+    if (Files.notExists(mkdir)) Files.createDirectories(mkdir)
+    jsoup(URL,DIR)
   }
 
   def urlIdOf(url: String)(implicit session: DBSession): Option[Int] = {
@@ -42,11 +46,8 @@ object Main {
     DB.autoCommit { implicit session => insert(url,name) }
   }
 
-  def jsoup(url: String) = {
+  def jsoup(url: String, dir: String) = {
     val result = Jsoup.connect(url).get
-    val dir = "./get_files/"
-    val mkdir = Paths.get(dir)
-    if (Files.notExists(mkdir)) Files.createDirectories(mkdir)
 
     for (t <- result.select("img").asScala) {
       val x = t.attr("src")
