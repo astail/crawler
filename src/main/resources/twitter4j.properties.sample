@@ -1,0 +1,6 @@
+debug=true
+oauth.consumerKey=xxxxxxxxxxxxxxxxxxxxxxxx
+oauth.consumerSecret=xxxxxxxxxxxxxxxxxxxxxxxx
+oauth.accessToken=xxxxxxxxxxxxxxxxxxxxxxxx
+oauth.accessTokenSecret=xxxxxxxxxxxxxxxxxxxxxxxx
+twitter4j.loggerFactory=twitter4j.NullLoggerFactory
