@@ -10,5 +10,6 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "6.0.6",
   "org.scalikejdbc" %% "scalikejdbc" % "3.2.3",
   "org.twitter4j" % "twitter4j-core" % "4.0.6",
-  "org.twitter4j" % "twitter4j-stream" % "4.0.6"
+  "org.twitter4j" % "twitter4j-stream" % "4.0.6",
+  "com.danielasfregola" %% "twitter4s" % "5.5"
 )

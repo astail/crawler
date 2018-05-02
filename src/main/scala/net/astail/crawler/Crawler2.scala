@@ -15,4 +15,5 @@ object Crawler2 {
     twitter.updateStatus(message)
     println(s"Successfully updated the status to [${message}].")
   }
+
 }
