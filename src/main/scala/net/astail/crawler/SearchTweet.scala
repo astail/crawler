@@ -1,7 +1,6 @@
 package net.astail.crawler
 
 import com.danielasfregola.twitter4s.TwitterRestClient
-import com.danielasfregola.twitter4s.http.clients.rest.search
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -16,7 +15,10 @@ object SearchTweet {
     val searchTw = client.searchTweet("HHKB lang:ja", count = 3)
 
     searchTw.onComplete {
-      case Success(msg) => println(s"${msg.data.statuses(0).text}")
+      case Success(msg) => for (tweet <- msg.data.statuses) {
+        //println(s"${msg.data.statuses(0).text}")
+        println(s"${tweet.id}, ${tweet.text}")
+      }
       case Failure(t) => println(t.getMessage())
     }
 
@@ -24,3 +26,5 @@ object SearchTweet {
     client.shutdown()
   }
 }
+
+
