@@ -12,12 +12,11 @@ object SearchTweet {
 
   def search = {
     val client = TwitterRestClient()
-    val searchTw = client.searchTweet("HHKB lang:ja", count = 3)
+    val searchTw = client.searchTweet("HHKB lang:ja", count = 10)
 
     searchTw.onComplete {
       case Success(msg) => for (tweet <- msg.data.statuses) {
-        //println(s"${msg.data.statuses(0).text}")
-        println(s"${tweet.id}, ${tweet.text}")
+        println(s"${tweet.id}, ${tweet.user.get.name}, @${tweet.user.get.screen_name}, ${tweet.text}")
       }
       case Failure(t) => println(t.getMessage())
     }
@@ -26,5 +25,3 @@ object SearchTweet {
     client.shutdown()
   }
 }
-
-
