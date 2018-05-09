@@ -12,19 +12,16 @@ object SearchTweet {
 
   def search = {
     val client = TwitterRestClient()
-    val searchTw = client.searchTweet("zabbix lang:ja", count = 10)
+    val searchTw = client.searchTweet("モンエナうぐぅ", count = 10)
 
     searchTw.onComplete {
       case Success(msg) => for (tweet <- msg.data.statuses) {
 
-        val imageGet = tweet.extended_entities.flatMap { x =>
-          Some(x.media.map(_.media_url))
-        }.getOrElse(List("image_url"))
+        val images = tweet.extended_entities.map { x =>
+          x.media.map(_.media_url)
+        }
 
-        println(s"${tweet.id}, ${tweet.user.get.name}, @${tweet.user.get.screen_name}, ${tweet.text}, ${imageGet.mkString(",")}")
-
-        if(imageGet != List("image_url"))
-          println("ok")
+        println(s"${tweet.id}, ${tweet.user.get.name}, @${tweet.user.get.screen_name}, ${tweet.text}, ${images.map(_.mkString(",")).getOrElse("NoData")}")
       }
       case Failure(t) => println(t.getMessage())
     }
