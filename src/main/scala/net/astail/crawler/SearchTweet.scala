@@ -22,6 +22,9 @@ object SearchTweet {
         }.getOrElse(List("image_url"))
 
         println(s"${tweet.id}, ${tweet.user.get.name}, @${tweet.user.get.screen_name}, ${tweet.text}, ${imageGet.mkString(",")}")
+
+        if(imageGet != List("image_url"))
+          println("ok")
       }
       case Failure(t) => println(t.getMessage())
     }
