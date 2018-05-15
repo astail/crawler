@@ -2,7 +2,7 @@ package net.astail.crawler
 
 import com.danielasfregola.twitter4s.TwitterRestClient
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.util.{Failure, Success}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -14,7 +14,7 @@ object SearchTweet {
 
   def search = {
     val client = TwitterRestClient()
-    val searchTw = client.searchTweet("HHKB lang:ja", count = 500)
+    val searchTw = client.searchTweet("キーキャップ替えてみた #HHKB", count = 10)
 
     searchTw.onComplete {
       case Success(msg) => for (tweet <- msg.data.statuses) {
@@ -27,7 +27,7 @@ object SearchTweet {
 
         images match  {
           case Some(x) => for(yy <- x) download(yy)
-          case None => println("noImage")
+          case None => "nothing!"
         }
       }
       case Failure(t) => println(t.getMessage())
@@ -37,8 +37,17 @@ object SearchTweet {
     client.shutdown()
   }
 
-  def download(url: String): Future[String] = Future {
-    val name = url.split("/").reverse.toList.headOption.get
-    new URL(url) #> new File(s"./get_files/${name}") !!
+    def download(url: String): String = {
+      val name = url.split("/").last
+      retry(new URL(url) #> new File(s"./get_files/${name}") !!)
+    }
+
+  def retry[R](f: => R, count: Int = 3): R = {
+    try {
+      f
+    } catch {
+      case _: Throwable if count > 0 =>
+        retry(f, count - 1)
+    }
   }
 }
